@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 var vscode = require('vscode');
 var spawn = require('child_process').spawn;
+var sequenceDiagramProvider = require('./sequenceDiagramProvider');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -20,7 +21,9 @@ function activate(context) {
         // Display a message box to the user
         vscode.window.showInformationMessage('Hello World!');
     });
-                                                                           
+
+    const previewUri = vscode.Uri.parse('vscode-sdedit://authority/vscode-sdedit');
+
     var renderSequenceDiagram = vscode.commands.registerCommand('extension.renderSequenceDiagram', function () {
         // The code you place here will be executed every time your command is executed
         var editor = vscode.window.activeTextEditor;
@@ -28,27 +31,60 @@ function activate(context) {
             return; // No open text editor
         }
 
-        //java -jar sdedit-4.2-beta8.jar -o ./seq.bmp -t bmp ./sample.sd
-        var child = spawn('java', ['-jar', 'sdedit-4.2-beta8.jar', '-o', './tmp.bmp', 'D:\Projects\vscode_extension\sdedit\sample.sd']);
+        const fileText = editor.document.getText();
+        console.log(fileText);
         
-        child.on('close', function (exitCode) {
-            if (exitCode !== 0) {
-                console.error('Something went wrong!');
-            }
-        });
+
+        //java -jar sdedit-4.2-beta8.jar -o ./seq.bmp -t bmp ./sample.sd
+        // var child = spawn('java', ['-jar', 'D:\\Projects\\vscode_extension\\sdedit\\sdedit-4.2-beta8.jar', '-o', 
+        //     'D:\\Projects\\vscode_extension\\sdedit\\tmp.bmp', 'D:\\Projects\\vscode_extension\\sdedit\\sample.sd']);
+        
+        // child.on('close', function (exitCode) {
+        //     if (exitCode !== 0) {                
+        //         vscode.window.showErrorMessage('Sequence diagram renderer exit code: ' + exitCode);
+        //     }
+        // });
 
         // If you’re really just passing it through, though, pass {stdio: 'inherit'}
         // to child_process.spawn instead.
-        child.stderr.on('data', function (data) {
-            process.stderr.write(data);
-        });
+        // child.stderr.on('data', function (data) {
+        //     process.stderr.write(data);
+        // });
+
+        // child.stdout.on('data', function (data) {
+        //     console.log("IM HERE");
+        //     console.log('data' + data);
+        // });
+
+        // child.stderr.on('data', function (data) {
+        //     console.log("IM HERE - Error");
+        //     console.log('test: ' + data);
+        // });
+ 
+    var disp = vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then(
+            (success) => { provider.load(previewUri); },
+            (reason) => { vscode.window.showErrorMessage(reason); });
+    return disp;
 
         // Display a message box to the user
-        vscode.window.showInformationMessage('Diagram rendered');
+        // vscode.window.showInformationMessage('Diagram rendered');
     });
 
+     function load(uri){
+         console.log('loading ', uri);
+         return "preview here";
+     }
+
+    let provider = new sequenceDiagramProvider();
+    let registration = vscode.workspace.registerTextDocumentContentProvider('vscode-yuml', provider);
+
+
+    vscode.workspace.onDidSaveTextDocument((e) => { provider.load(previewUri); });
+    vscode.workspace.onDidOpenTextDocument((e) => { provider.load(previewUri); });
+    vscode.window.onDidChangeActiveTextEditor((e) => { provider.load(previewUri); });
+
     context.subscriptions.push(sayHello);
-    context.subscriptions.push(renderSequenceDiagram);
+    context.subscriptions.push(renderSequenceDiagram, registration);
 }
 exports.activate = activate;
 
