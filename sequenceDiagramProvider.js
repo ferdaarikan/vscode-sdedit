@@ -14,7 +14,15 @@ class sequenceDiagramProvider{
                 if (editor)
                     editor.show();
             
-        const html = `<!DOCTYPE html><html><head></head><body bgcolor="white">${this.diagram}</body></html>`;
+        const html = `<!DOCTYPE html><html>
+        <head>
+        </head>
+        <body style="background-color:white">
+            <div style="background-color:white">
+                ${this.diagram}
+            </div>
+        </body>
+        </html>`;
         return html;
     }
 
@@ -35,8 +43,8 @@ class sequenceDiagramProvider{
         }
 
         renderer.render(fileText, diagramRendered);
-        this.diagram = "rendering...";
-        this._onDidChange.fire(uri);
+        //this.diagram = "rendering...";
+       // this._onDidChange.fire(uri);
     }
 
     update(uri){

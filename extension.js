@@ -31,7 +31,7 @@ function activate(context) {
     vscode.workspace.onDidSaveTextDocument((e) => { provider.load(previewUri); });
     vscode.workspace.onDidOpenTextDocument((e) => { provider.load(previewUri); });
     vscode.window.onDidChangeActiveTextEditor((e) => { provider.load(previewUri); });
-
+    
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand

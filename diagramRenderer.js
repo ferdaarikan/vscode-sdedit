@@ -20,15 +20,17 @@ class diagramRenderer {
     }
 
     readOptions(row) {
-        return {type : "svg" };
+        const jsonString = row.replace("//", "");
+        const options = JSON.parse(jsonString);
+
+        return options ? options : {type : "svg" };
     }
 
     render(content, callback) {
 
         var diagramRows = [];
         var options = { type: "svg" };
-
-
+        
         var rows = content.split(/\r|\n/);
         for (var i = 0; i < rows.length; i++) {
             var row = rows[i].replace(/^\s+|\s+$/g, '');
@@ -39,7 +41,7 @@ class diagramRenderer {
         }
 
         //save rows to temp file    
-        const inputPath = this.saveFile("diagram.input", rows);
+        const inputPath = this.saveFile("diagram.input", diagramRows);
 
         const binaryPath = 'D:\\Projects\\vscode_extension\\sdedit\\sdedit-4.2-beta8.jar';
         const outputPath = 'D:\\Projects\\vscode_extension\\sdedit\\tmpdiagram\\tmp.' + options.type;
