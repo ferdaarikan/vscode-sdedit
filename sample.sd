@@ -1,3 +1,5 @@
+// {threaded:false}
+// {exportType:bmp}
 
 user:Actor
 ui:Trellis Web Client
@@ -12,17 +14,17 @@ a:Audit Service
 
 
 user:ui.create thesis
-ui:create thesis=x.createThesis(props)
-x:thesisId=t.createThesis(props)
+	ui:create thesis=x.createThesis(props)
+		x:thesisId=t.createThesis(props)	
 ui:user.thesis created
 
 user:ui.add instruments
-ui:instruments added=x.addInstruments(instruments, thesisId)
-x:OK=t.addInstruments(instruments, thesisId)
+	ui:instruments added=x.addInstruments(instruments, thesisId)		
+		x:OK=t.addInstruments(instruments, thesisId)
 ui:user.instruments added
 
 user:ui.change instrument size
-ui:change weight=x.changeWeight(positionId, weigth)
-
+	ui:change weight=x.changeWeight(positionId, weigth)
+		
 
 

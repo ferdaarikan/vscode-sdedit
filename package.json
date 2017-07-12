@@ -11,13 +11,11 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello", "onCommand:extension.renderSequenceDiagram", "onCommand:extension.viewSequenceDiagram"
+        "onCommand:extension.viewSequenceDiagram"
     ],
     "main": "./extension",
     "contributes": {
-        "commands": [{ "command": "extension.sayHello", "title": "Hello World"},
-                     { "command": "extension.renderSequenceDiagram", "title": "Render sequence diagram"},        
-                     { "command": "extension.viewSequenceDiagram", "title": "View sequence diagram"}  
+        "commands": [ { "command": "extension.viewSequenceDiagram", "title": "View sequence diagram"}  
         ]
     },
     "scripts": {

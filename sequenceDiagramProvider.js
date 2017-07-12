@@ -26,7 +26,7 @@ class sequenceDiagramProvider{
         return html;
     }
 
-    load(uri){
+    provide(uri){
         console.log("lodaa");
         var editor = vscode.window.activeTextEditor;
         if (!editor) {
@@ -34,6 +34,7 @@ class sequenceDiagramProvider{
         }
 
         const fileText = editor.document.getText();
+        const editorFileName = editor.document.fileName;
         const renderer = new diagramRenderer();
        
         const self = this;
@@ -42,15 +43,7 @@ class sequenceDiagramProvider{
             self._onDidChange.fire(uri);    
         }
 
-        renderer.render(fileText, diagramRendered);
-        //this.diagram = "rendering...";
-       // this._onDidChange.fire(uri);
-    }
-
-    update(uri){
-        console.log("updaa");
-        this.diagram = "zopa" ;
-        this._onDidChange.fire(uri);
+        renderer.render(fileText, editorFileName, diagramRendered);        
     }
 
     get onDidChange () { 

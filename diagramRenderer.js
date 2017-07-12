@@ -19,23 +19,53 @@ class diagramRenderer {
         return filePath;
     }
 
-    readOptions(row) {
-        const jsonString = row.replace("//", "");
-        const options = JSON.parse(jsonString);
+    readOptions(row, options) {
+        // const jsonString = row.replace("//", "");
+        // const options = JSON.parse(jsonString);
 
-        return options ? options : {type : "svg" };
+        // return options ? options : {type : "svg" };
+        row = row.replace(/^\s+|\s+$/g,'');
+        var keyvalue = /^\/\/\s+\{\s*([\w]+)\s*:\s*([\w]+)\s*\}$/.exec(row);  // extracts directives as:  // {key:value}
+        if (keyvalue != null && keyvalue.length == 3)
+        {
+            var key = keyvalue[1];
+            var value = keyvalue[2];
+
+            options[key] = value;
+        }
     }
 
-    render(content, callback) {
+    buildArgs(baseArgs, options, inputPath) {
+        for (var property in options) {
+            if (options.hasOwnProperty(property)) {                
+                switch(property){
+                    case "threaded":
+                    if (/^(true|false)$/.test(value)){
+                        baseArgs.push('--threaded');
+                        baseArgs.push(options[property]);
+                    } else {
+                        options.error = "Error: invalid value for 'threaded'. Allowed values are: true, false.";
+                    }
+                    
+                    break;
+                }
+            }
+        }
+
+        baseArgs.push(inputPath);
+        return baseArgs;
+    }
+
+    render(content, editorFile, callback) {
 
         var diagramRows = [];
-        var options = { type: "svg" };
+        var options = { previewType : "svg", threaded : false };
         
         var rows = content.split(/\r|\n/);
         for (var i = 0; i < rows.length; i++) {
             var row = rows[i].replace(/^\s+|\s+$/g, '');
             if (row.startsWith("//"))
-                options = this.readOptions(row);
+                this.readOptions(row, options);
             else
                 diagramRows.push(row);
         }
@@ -44,14 +74,23 @@ class diagramRenderer {
         const inputPath = this.saveFile("diagram.input", diagramRows);
 
         const binaryPath = 'D:\\Projects\\vscode_extension\\sdedit\\sdedit-4.2-beta8.jar';
-        const outputPath = 'D:\\Projects\\vscode_extension\\sdedit\\tmpdiagram\\tmp.' + options.type;
+        const outputPath = 'D:\\Projects\\vscode_extension\\sdedit\\tmpdiagram\\tmp.' + options.previewType;
         
-        //java -jar sdedit-4.2-beta8.jar -o ./seq.bmp -t bmp ./sample.sd
-        var child = spawn('java', ['-jar', binaryPath, '-o', outputPath, '-t', options.type, inputPath]);
+        if(options.exportType){
+            var exportFileName = editorFile.replace(/\.[^.$]+$/, '.' + options.exportType);
+            const baseArgs = this.buildArgs([ '-jar', binaryPath, '-o', exportFileName, '-t', options.exportType ], 
+                            options, inputPath );
+            // ['-jar', binaryPath, '-o', exportFileName, '-t', options.exportType, inputPath]
+            spawn('java', baseArgs);
+        }
+
+        const previewArgs = this.buildArgs(['-jar', binaryPath, '-o', outputPath, '-t', options.previewType], options, inputPath );
+        var child = spawn('java', previewArgs);
+
 
         child.on('close', function (exitCode) {
-            if (exitCode !== 0) {
-                vscode.window.showErrorMessage('Sequence diagram renderer exit code: ' + exitCode);
+            if (exitCode !== 0) {                
+                console.log('Sequence diagram renderer exit code: ' + exitCode);
             }
             fs.readFile(outputPath, "utf8", function(err, data) {
                 callback("rendered code: " + exitCode + data);    
