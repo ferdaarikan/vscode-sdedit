@@ -9,14 +9,14 @@ class sequenceDiagramProvider{
             this.diagram = "";
     }
 
-provideTextDocumentContent (uri, token) {
-     var editor = vscode.window.activeTextEditor;
-            if (editor)
-                editor.show();
-
-
-    return this.diagram;
-}
+    provideTextDocumentContent (uri, token) {
+        var editor = vscode.window.activeTextEditor;
+                if (editor)
+                    editor.show();
+            
+        const html = `<!DOCTYPE html><html><head></head><body bgcolor="white">${this.diagram}</body></html>`;
+        return html;
+    }
 
     load(uri){
         console.log("lodaa");
@@ -27,10 +27,15 @@ provideTextDocumentContent (uri, token) {
 
         const fileText = editor.document.getText();
         const renderer = new diagramRenderer();
-        renderer.render(fileText);
+       
+        const self = this;
+         function diagramRendered(contents){            
+            self.diagram = contents;
+            self._onDidChange.fire(uri);    
+        }
 
-        this.diagram = "processYumlDocument(text, filename, false);";
-
+        renderer.render(fileText, diagramRendered);
+        this.diagram = "rendering...";
         this._onDidChange.fire(uri);
     }
 

@@ -12,18 +12,18 @@ class diagramRenderer {
     }
 
     saveFile(fileName, rowArray) {
-        const rootPath = `${__dirname}/tmpdiagram`;
-        const stream = fileInfo.stream;
+        const rootPath = `${__dirname}/tmpdiagram`;        
         this.ensurePathExists(rootPath);        
         const filePath = `${rootPath}/${fileName}`;
         fs.writeFileSync(filePath, rowArray.join('\n') , 'utf-8'); 
+        return filePath;
     }
 
     readOptions(row) {
         return {type : "svg" };
     }
 
-    render(content) {
+    render(content, callback) {
 
         var diagramRows = [];
         var options = { type: "svg" };
@@ -39,12 +39,11 @@ class diagramRenderer {
         }
 
         //save rows to temp file    
-        this.saveFile("diagram.input", rows);
+        const inputPath = this.saveFile("diagram.input", rows);
 
         const binaryPath = 'D:\\Projects\\vscode_extension\\sdedit\\sdedit-4.2-beta8.jar';
-        const outputPath = 'D:\\Projects\\vscode_extension\\sdedit\\tmp.bmp';
-        const inputPath = 'D:\\Projects\\vscode_extension\\sdedit\\sample.sd';
-
+        const outputPath = 'D:\\Projects\\vscode_extension\\sdedit\\tmpdiagram\\tmp.' + options.type;
+        
         //java -jar sdedit-4.2-beta8.jar -o ./seq.bmp -t bmp ./sample.sd
         var child = spawn('java', ['-jar', binaryPath, '-o', outputPath, '-t', options.type, inputPath]);
 
@@ -52,6 +51,9 @@ class diagramRenderer {
             if (exitCode !== 0) {
                 vscode.window.showErrorMessage('Sequence diagram renderer exit code: ' + exitCode);
             }
+            fs.readFile(outputPath, "utf8", function(err, data) {
+                callback("rendered code: " + exitCode + data);    
+            });            
         });
 
         // If you’re really just passing it through, though, pass {stdio: 'inherit'}

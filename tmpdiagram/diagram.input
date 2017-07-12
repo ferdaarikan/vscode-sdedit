@@ -1,0 +1,27 @@
+user:Actor
+ui:Trellis Web Client
+x:Trellis Experience Service
+c:Client service
+i:Instrument Service
+t:Thesis Service
+p:Position Service
+g:Compute grid
+o:Order Service
+a:Audit Service
+
+
+user:ui.create thesis
+	ui:create thesis=x.createThesis(props)
+		x:thesisId=t.createThesis(props)	
+ui:user.thesis created
+
+user:ui.add instruments to thesis
+	ui:instruments added=x.addInstruments(instruments, thesisId)		
+		x:OK=t.addInstruments(instruments, thesisId)
+ui:user.instruments added to thesis
+
+user:ui.change existing instrument size
+	ui:change position weight=x.changeWeight(positionId, weigth)
+		
+
+
