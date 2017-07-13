@@ -1,9 +1,11 @@
-var vscode = require('vscode');
 var spawn = require('child_process').spawn;
 var fs = require('fs');
 const path = require('path');
 
 class diagramRenderer {
+    constructor(){
+        this.options = { previewType : "svg", threaded : false , errors: [] };
+    }
 
     ensurePathExists(dir) {
         if (!fs.existsSync(dir)) {
@@ -19,32 +21,28 @@ class diagramRenderer {
         return filePath;
     }
 
-    readOptions(row, options) {
-        // const jsonString = row.replace("//", "");
-        // const options = JSON.parse(jsonString);
-
-        // return options ? options : {type : "svg" };
+    readOptions(row) {      
         row = row.replace(/^\s+|\s+$/g,'');
-        var keyvalue = /^\/\/\s+\{\s*([\w]+)\s*:\s*([\w]+)\s*\}$/.exec(row);  // extracts directives as:  // {key:value}
+        var keyvalue = /^#\s+\{\s*([\w]+)\s*:\s*([\w]+)\s*\}$/.exec(row);  // extracts directives as:  // {key:value}
         if (keyvalue != null && keyvalue.length == 3)
         {
             var key = keyvalue[1];
             var value = keyvalue[2];
 
-            options[key] = value;
+            this.options[key] = value;
         }
     }
 
-    buildArgs(baseArgs, options, inputPath) {
-        for (var property in options) {
-            if (options.hasOwnProperty(property)) {                
+    buildArgs(baseArgs, inputPath) {
+        for (var property in this.options) {
+            if (this.options.hasOwnProperty(property)) {                
+                const value = this.options[property];
                 switch(property){
                     case "threaded":
                     if (/^(true|false)$/.test(value)){
-                        baseArgs.push('--threaded');
-                        baseArgs.push(options[property]);
+                        baseArgs.push('--threaded', value);
                     } else {
-                        options.error = "Error: invalid value for 'threaded'. Allowed values are: true, false.";
+                        this.options.error = "Error: invalid value for 'threaded'. Allowed values are: true, false.";
                     }
                     
                     break;
@@ -58,14 +56,12 @@ class diagramRenderer {
 
     render(content, editorFile, callback) {
 
-        var diagramRows = [];
-        var options = { previewType : "svg", threaded : false };
-        
+        var diagramRows = [];                
         var rows = content.split(/\r|\n/);
         for (var i = 0; i < rows.length; i++) {
             var row = rows[i].replace(/^\s+|\s+$/g, '');
-            if (row.startsWith("//"))
-                this.readOptions(row, options);
+            if (row.startsWith("#"))
+                this.readOptions(row);
             else
                 diagramRows.push(row);
         }
@@ -74,26 +70,28 @@ class diagramRenderer {
         const inputPath = this.saveFile("diagram.input", diagramRows);
 
         const binaryPath = 'D:\\Projects\\vscode_extension\\sdedit\\sdedit-4.2-beta8.jar';
-        const outputPath = 'D:\\Projects\\vscode_extension\\sdedit\\tmpdiagram\\tmp.' + options.previewType;
+        const outputPath = 'D:\\Projects\\vscode_extension\\sdedit\\tmpdiagram\\tmp.' + this.options.previewType;
         
-        if(options.exportType){
-            var exportFileName = editorFile.replace(/\.[^.$]+$/, '.' + options.exportType);
-            const baseArgs = this.buildArgs([ '-jar', binaryPath, '-o', exportFileName, '-t', options.exportType ], 
-                            options, inputPath );
-            // ['-jar', binaryPath, '-o', exportFileName, '-t', options.exportType, inputPath]
+        if(this.options.exportType){
+            var exportFileName = editorFile.replace(/\.[^.$]+$/, '.' + this.options.exportType);
+            const baseArgs = this.buildArgs([ '-jar', binaryPath, '-o', exportFileName, '-t', this.options.exportType ], inputPath );            
             spawn('java', baseArgs);
         }
 
-        const previewArgs = this.buildArgs(['-jar', binaryPath, '-o', outputPath, '-t', options.previewType], options, inputPath );
+        const previewArgs = this.buildArgs(['-jar', binaryPath, '-o', outputPath, '-t', this.options.previewType], inputPath );
         var child = spawn('java', previewArgs);
 
-
+        const self = this;
         child.on('close', function (exitCode) {
             if (exitCode !== 0) {                
-                console.log('Sequence diagram renderer exit code: ' + exitCode);
+                self.options.errors.push('Sequence diagram renderer exit code: ' + exitCode);                                
+            } else {
+                self.options.errors = [];                
             }
-            fs.readFile(outputPath, "utf8", function(err, data) {
-                callback("rendered code: " + exitCode + data);    
+            
+            const messages = self.options.errors.join('\n')
+            fs.readFile(outputPath, "utf8", function(err, data) {                                                
+                callback(data + messages);    
             });            
         });
 
@@ -102,15 +100,13 @@ class diagramRenderer {
         // child.stderr.on('data', function (data) {
         //     process.stderr.write(data);
         // });
-
-        child.stdout.on('data', function (data) {
-            console.log("IM HERE");
-            console.log('data' + data);
+        
+        child.stdout.on('data', function (data) {                        
+            self.options.errors.push( data.toString());
         });
 
-        child.stderr.on('data', function (data) {
-            console.log("IM HERE - Error");
-            console.log('test: ' + data);
+        child.stderr.on('data', function (data) {            
+             self.options.errors.push( data.toString());
         });
     }
 }

@@ -1,5 +1,5 @@
-// {threaded:false}
-// {exportType:bmp}
+# {threaded:false}
+# {exportType:bmp}
 
 user:Actor
 ui:Trellis Web Client
@@ -11,7 +11,6 @@ p:Position Service
 g:Compute grid
 o:Order Service
 a:Audit Service
-
 
 user:ui.create thesis
 	ui:create thesis=x.createThesis(props)
@@ -25,6 +24,5 @@ ui:user.instruments added
 
 user:ui.change instrument size
 	ui:change weight=x.changeWeight(positionId, weigth)
-		
-
-
+   
+   

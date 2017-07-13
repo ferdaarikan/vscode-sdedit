@@ -27,7 +27,7 @@ class sequenceDiagramProvider{
     }
 
     provide(uri){
-        console.log("lodaa");
+    
         var editor = vscode.window.activeTextEditor;
         if (!editor) {
             return; // No open text editor

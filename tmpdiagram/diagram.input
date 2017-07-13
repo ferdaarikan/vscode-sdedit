@@ -10,7 +10,6 @@ g:Compute grid
 o:Order Service
 a:Audit Service
 
-
 user:ui.create thesis
 ui:create thesis=x.createThesis(props)
 x:thesisId=t.createThesis(props)
@@ -23,6 +22,4 @@ ui:user.instruments added
 
 user:ui.change instrument size
 ui:change weight=x.changeWeight(positionId, weigth)
-
-
 
