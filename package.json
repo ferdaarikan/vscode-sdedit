@@ -15,27 +15,25 @@
     ],
     "main": "./extension",
     "contributes": {
-        "commands": [ { "command": "extension.viewSequenceDiagram", "title": "View sequence diagram"}  ],
+        "commands": [
+            {
+                "command": "extension.viewSequenceDiagram",
+                "title": "View sequence diagram"
+            }
+        ],
         "languages": [
-			{
-				"id": "sd",
-				"aliases": [
-					"SD",
-					"sd"
-				],
-				"extensions": [
-					".sd"
-				],
-				"configuration": "./sd.configuration.json"
-			}
-		]//,
-		// "grammars": [
-		// 	{
-		// 		"language": "sd",
-		// 		"scopeName": "source.sd",
-		// 		"path": "./syntaxes/sd.tmLanguage"
-		// 	}
-		// ]    
+            {
+                "id": "sd",
+                "aliases": [
+                    "Quick sequence diagrams",
+                    "sdedit"
+                ],
+                "extensions": [
+                    ".sd"
+                ],
+                "configuration": "./sd.configuration.json"
+            }
+        ]    
     },
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install",

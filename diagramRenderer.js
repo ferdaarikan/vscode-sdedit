@@ -29,6 +29,22 @@ class diagramRenderer {
             var key = keyvalue[1];
             var value = keyvalue[2];
 
+            switch(key){
+                    case "threaded":
+                        if (/^(true|false)$/.test(value)){
+                            //baseArgs.push('--threaded', value);
+                        } else {
+                            throw new Error("Error: invalid value for 'threaded'. Allowed values are: true, false.");
+                        }                    
+                    break;
+                    case "exportType":
+                        if (/^(ps|pdf|emf|svg|png|gif|jpg|bmp)$/.test(value)){                        
+                        } else {
+                            throw new Error("Error: invalid value for 'exportType'. Allowed values are: ps, pdf, emf, svg, png, gif, jpg, bmp.");
+                        }                    
+                    break;
+                }
+
             this.options[key] = value;
         }
     }
@@ -39,12 +55,17 @@ class diagramRenderer {
                 const value = this.options[property];
                 switch(property){
                     case "threaded":
-                    if (/^(true|false)$/.test(value)){
-                        baseArgs.push('--threaded', value);
-                    } else {
-                        this.options.error = "Error: invalid value for 'threaded'. Allowed values are: true, false.";
-                    }
-                    
+                        if (/^(true|false)$/.test(value)){
+                            baseArgs.push('--threaded', value);
+                        } else {
+                            this.options.errors.push("Error: invalid value for 'threaded'. Allowed values are: true, false.");
+                        }                    
+                    break;
+                    case "exportType":
+                        if (/^(ps|pdf|emf|svg|png|gif|jpg|bmp)$/.test(value)){                        
+                        } else {
+                            this.options.errors.push("Error: invalid value for 'exportType'. Allowed values are: ps, pdf, emf, svg, png, gif, jpg, bmp.");
+                        }                    
                     break;
                 }
             }

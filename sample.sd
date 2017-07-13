@@ -23,6 +23,5 @@ user:ui.add instruments
 ui:user.instruments added
 
 user:ui.change instrument size
-	ui:change weight=x.changeWeight(positionId, weigth)
-   
-   
+	ui:change weight=x.changeWeight(positionId, weight)	
+

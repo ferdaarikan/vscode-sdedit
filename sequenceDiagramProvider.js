@@ -43,7 +43,11 @@ class sequenceDiagramProvider{
             self._onDidChange.fire(uri);    
         }
 
+        try{
         renderer.render(fileText, editorFileName, diagramRendered);        
+        } catch(e){
+            vscode.window.showErrorMessage(e.message);
+        }
     }
 
     get onDidChange () { 
