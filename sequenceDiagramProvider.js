@@ -33,6 +33,10 @@ class sequenceDiagramProvider{
             return; // No open text editor
         }
 
+        if(editor.document.languageId !== 'sd'){
+            return;
+        }
+
         const fileText = editor.document.getText();
         const editorFileName = editor.document.fileName;
         const renderer = new diagramRenderer();

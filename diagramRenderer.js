@@ -77,7 +77,6 @@ class diagramRenderer {
     }
 
     render(content, editorFile, callback) {
-
         var diagramRows = [];                
         var rows = content.split(os.EOL);
         for (var i = 0; i < rows.length; i++) {
