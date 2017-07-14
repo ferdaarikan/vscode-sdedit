@@ -8,7 +8,7 @@ c:Client service
 i:Instrument Service
 t:Thesis Service
 p:Position Service
-g:Compute grid
+g:Compute grid  
 o:Order Service
 a:Audit Service
 
@@ -19,9 +19,8 @@ ui:user.thesis created
 
 user:ui.add instruments
 	ui:instruments added=x.addInstruments(instruments, thesisId)		
-		x:OK=t.addInstruments(instruments, thesisId)
+		x:OK=t.addInstruments(instruments, thesisId) 
 ui:user.instruments added
 
 user:ui.change instrument size
-	ui:change weight=x.changeWeight(positionId, weight)	
-
+	ui:change weight=x.changeWeight(positionId, weight)

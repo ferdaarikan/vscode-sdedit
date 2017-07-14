@@ -1,10 +1,12 @@
 var spawn = require('child_process').spawn;
 var fs = require('fs');
+var os = require('os');
 const path = require('path');
 
 class diagramRenderer {
     constructor(){
         this.options = { previewType : "svg", threaded : false , errors: [] };
+        this.rootPath = path.join(os.tmpdir(), "tmpdiagram");        
     }
 
     ensurePathExists(dir) {
@@ -13,10 +15,9 @@ class diagramRenderer {
         }
     }
 
-    saveFile(fileName, rowArray) {
-        const rootPath = `${__dirname}/tmpdiagram`;        
-        this.ensurePathExists(rootPath);        
-        const filePath = `${rootPath}/${fileName}`;
+    saveFile(fileName, rowArray) {        
+        this.ensurePathExists(this.rootPath);        
+        const filePath = `${this.rootPath}/${fileName}`;
         fs.writeFileSync(filePath, rowArray.join('\n') , 'utf-8'); 
         return filePath;
     }
@@ -89,9 +90,8 @@ class diagramRenderer {
 
         //save rows to temp file    
         const inputPath = this.saveFile("diagram.input", diagramRows);
-
-        const binaryPath = 'D:\\Projects\\vscode_extension\\sdedit\\sdedit-4.2-beta8.jar';
-        const outputPath = 'D:\\Projects\\vscode_extension\\sdedit\\tmpdiagram\\tmp.' + this.options.previewType;
+        const binaryPath = path.join(__dirname, 'sdedit-4.2-beta8.jar');
+        const outputPath = path.join(this.rootPath, 'tmp.' + this.options.previewType);
         
         if(this.options.exportType){
             var exportFileName = editorFile.replace(/\.[^.$]+$/, '.' + this.options.exportType);
