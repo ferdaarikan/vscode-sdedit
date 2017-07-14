@@ -18,7 +18,7 @@ class diagramRenderer {
     saveFile(fileName, rowArray) {        
         this.ensurePathExists(this.rootPath);        
         const filePath = `${this.rootPath}/${fileName}`;
-        fs.writeFileSync(filePath, rowArray.join('\n') , 'utf-8'); 
+        fs.writeFileSync(filePath, rowArray.join(os.EOL) , 'utf-8'); 
         return filePath;
     }
 
