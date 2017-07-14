@@ -26,14 +26,14 @@ class sequenceDiagramProvider{
         return html;
     }
 
-    provide(uri){
-    
+    provide(uri){    
         var editor = vscode.window.activeTextEditor;
         if (!editor) {
+            
             return; // No open text editor
         }
 
-        if(editor.document.languageId !== 'sd'){
+        if(editor.document.languageId !== "sd"){
             return;
         }
 
@@ -48,7 +48,7 @@ class sequenceDiagramProvider{
         }
 
         try{
-        renderer.render(fileText, editorFileName, diagramRendered);        
+            renderer.render(fileText, editorFileName, diagramRendered);        
         } catch(e){
             vscode.window.showErrorMessage(e.message);
         }

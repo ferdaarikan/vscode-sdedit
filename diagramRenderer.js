@@ -78,7 +78,7 @@ class diagramRenderer {
 
     render(content, editorFile, callback) {
         var diagramRows = [];                
-        var rows = content.split(os.EOL);
+        var rows = content.split(/\r\n|\n|\r/);
         for (var i = 0; i < rows.length; i++) {
             var row = rows[i].replace(/^\s+|\s+$/g, '');
             if (row.startsWith("#"))
