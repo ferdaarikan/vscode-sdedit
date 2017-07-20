@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>sd</string>
+	</array>
+	<key>name</key>
+	<string>sd</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>^(// *{ *\w+ *: *\w+ *} *$)</string>
+			<key>name</key>
+			<string>meta.preprocessor.numeric</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^(#.*$)</string>
+			<key>name</key>
+			<string>comment.line</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\([^)]*\)</string>
+			<key>name</key>
+			<string>entity.name.tag.css</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\[[^]]*\]</string>
+			<key>name</key>
+			<string>meta.preprocessor.string</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.sd</string>
+</dict>
+</plist>
