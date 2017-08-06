@@ -1,4 +1,4 @@
-var spawn = require('child_process').spawn;
+var { spawn, execFile } = require('child_process');
 var fs = require('fs');
 var os = require('os');
 const path = require('path');
@@ -79,6 +79,13 @@ class diagramRenderer {
     render(content, editorFile, callback) {
         var diagramRows = [];                
         var rows = content.split(/\r\n|\n|\r/);
+
+        const update = (msg)=>{
+            callback({ diagram: null, errors: null, status: msg });    
+        }
+
+        update("compiling source...");
+
         for (var i = 0; i < rows.length; i++) {
             var row = rows[i].replace(/^\s+|\s+$/g, '');
             if (row.startsWith("#"))
@@ -87,19 +94,22 @@ class diagramRenderer {
                 diagramRows.push(row);
         }
 
+        update("generating inputs...")
+        
         //save rows to temp file    
         const inputPath = this.saveFile("diagram.input", diagramRows);
         const binaryPath = path.join(__dirname, 'sdedit-4.2-beta8.jar');
         const outputPath = path.join(this.rootPath, 'tmp.' + this.options.previewType);
+        update("rendering diagram...")        
+        const previewArgs = this.buildArgs(['-Xmx100m', '-jar', binaryPath, '-o', outputPath, '-t', this.options.previewType], inputPath );
+        var child = spawn('java', previewArgs);
         
         if(this.options.exportType){
             var exportFileName = editorFile.replace(/\.[^.$]+$/, '.' + this.options.exportType);
-            const baseArgs = this.buildArgs([ '-jar', binaryPath, '-o', exportFileName, '-t', this.options.exportType ], inputPath );            
-            spawn('java', baseArgs);
+            const baseArgs = this.buildArgs([ '-Xmx100m', '-jar', binaryPath, '-o', exportFileName, '-t', this.options.exportType ], inputPath );            
+            update("rendering export...")
+            spawn('java', baseArgs);            
         }
-
-        const previewArgs = this.buildArgs(['-jar', binaryPath, '-o', outputPath, '-t', this.options.previewType], inputPath );
-        var child = spawn('java', previewArgs);
 
         const self = this;
         child.on('close', function (exitCode) {
@@ -109,9 +119,12 @@ class diagramRenderer {
                 self.options.errors = [];                
             }
             
-            const messages = self.options.errors.join('\n')
+            const messages = self.options.errors.map((item) => { 
+                return `<div>${item}</div>`;    
+            });
+
             fs.readFile(outputPath, "utf8", function(err, data) {                                                
-                callback(data + messages);    
+                callback({ diagram: data, errors: messages, status: null });    
             });            
         });
 
@@ -120,13 +133,29 @@ class diagramRenderer {
         // child.stderr.on('data', function (data) {
         //     process.stderr.write(data);
         // });
+
+        const stripMsg = (str)=>{
+            const pattern =  /:\s(.*)/;
+            const regex = new RegExp(pattern); 
+            const matches = str.match(regex);
+            if(matches){
+                return matches[matches.length - 1];
+            } else{
+                return null;
+            }
+        }
+
         
         child.stdout.on('data', function (data) {                        
-            self.options.errors.push( data.toString());
+            const msg = stripMsg(data.toString())
+            if(msg)
+                self.options.errors.push( msg );
         });
 
-        child.stderr.on('data', function (data) {            
-             self.options.errors.push( data.toString());
+        child.stderr.on('data', function (data) {
+            const msg = stripMsg(data.toString())
+            if(msg) 
+                self.options.errors.push( msg );
         });
     }
 }

@@ -15,7 +15,7 @@ a:Audit Service
 user:ui.create thesis
 	ui:create thesis=x.createThesis(props)
 		x:thesisId=t.createThesis(props)	
-ui:user.thesis created
+ui:user.thesis created 
 
 user:ui.add instruments
 	ui:instruments added=x.addInstruments(instruments, thesisId)		
