@@ -31,11 +31,11 @@ class sequenceDiagramProvider{
         }
 
         .loader {
-        border: 4px solid #f3f3f3; /* Light grey */
-        border-top: 4px solid #3498db; /* Blue */
+        border: 2px solid #f3f3f3; /* Light grey */
+        border-top: 2px solid #3498db; /* Blue */
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        width: 12px;
+        height: 12px;
         animation: spin 2s linear infinite;        
         }
 
@@ -73,18 +73,18 @@ class sequenceDiagramProvider{
             if(diagram){
                 self.content += `<div>${diagram}</div>`;            
             } 
-            
-            if(!diagram && !errors){
-                self.content += `<div class="loader"></div>`;
-            }
-
+           
             if(errors){  
                 if(errors.length > 0)                 
                 self.content += `<div class="error">${errors}</div>`;
             }
 
             if(status){
-                self.content += `<div>${status}</div>`;
+                self.content += `<div>`; 
+                 if(!diagram && !errors){
+                    self.content += `<div class="loader"></div>`;
+                } 
+                self.content += `${status}</div>`;
             }
 
             self._onDidChange.fire(uri);    
