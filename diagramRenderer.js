@@ -98,7 +98,7 @@ class diagramRenderer {
         
         //save rows to temp file    
         const inputPath = this.saveFile("diagram.input", diagramRows);
-        const binaryPath = path.join(__dirname, 'sdedit-4.2-beta8.jar');
+        const binaryPath = path.join(__dirname, 'sdedit.jar');
         const outputPath = path.join(this.rootPath, 'tmp.' + this.options.previewType);
         update("rendering diagram...")        
         const previewArgs = this.buildArgs(['-Xmx100m', '-jar', binaryPath, '-o', outputPath, '-t', this.options.previewType], inputPath );

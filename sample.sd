@@ -1,26 +1,29 @@
 # {threaded:false}
-# {exportType:bmp}
+# {exportType:png}
 
-user:Actor
-ui:Trellis Web Client
-x:Trellis Experience Service
-c:Client service
-i:Instrument Service
-t:Thesis Service
-p:Position Service
-g:Compute grid  
-o:Order Service
-a:Audit Service
+bfs:BFS[a]
+/queue:FIFO
+someNode:Node
+node:Node
+adjList:List
+adj:Node
 
-user:ui.create thesis
-	ui:create thesis=x.createThesis(props)
-		x:thesisId=t.createThesis(props)	
-ui:user.thesis created 
-
-user:ui.add instruments
-	ui:instruments added=x.addInstruments(instruments, thesisId)		
-		x:OK=t.addInstruments(instruments, thesisId) 
-ui:user.instruments added
-
-user:ui.change instrument size
-	ui:change weight=x.changeWeight(positionId, weight)
+bfs:queue.new
+bfs:someNode.setLevel(0)
+bfs:queue.insert(someNode)
+[c:loop while queue != ()]
+  bfs:node=queue.remove()
+  bfs:level=node.getLevel()
+  bfs:adjList=node.getAdjacentNodes()
+  [c:loop 0 <= i < #adjList]
+    bfs:adj=adjList.get(i)
+    bfs:nodeLevel=adj.getLevel()
+    [c:alt nodeLevel IS NOT defined]
+      bfs:adj.setLevel(level+1)
+      bfs:queue.insert(adj)
+      --[else]
+      bfs:nothing to do
+    [/c]
+  [/c]
+[/c]
+bfs:queue.destroy()

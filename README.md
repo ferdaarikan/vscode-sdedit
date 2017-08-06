@@ -1,65 +1,71 @@
 # sdedit README
 
-This is the README for your extension "sdedit". After writing up a brief description, we recommend including the following sections.
+Sequence Diagrams inside your favourite IDE. Simply define the sequences and see nicely rendered sequence diagrams. 
+
+```
+# {threaded:false}
+# {exportType:png}
+
+bfs:BFS[a]
+/queue:FIFO
+someNode:Node
+node:Node
+adjList:List
+adj:Node
+
+bfs:queue.new
+bfs:someNode.setLevel(0)
+bfs:queue.insert(someNode)
+[c:loop while queue != ()]
+  bfs:node=queue.remove()
+  bfs:level=node.getLevel()
+  bfs:adjList=node.getAdjacentNodes()
+  [c:loop 0 <= i < #adjList]
+    bfs:adj=adjList.get(i)
+    bfs:nodeLevel=adj.getLevel()
+    [c:alt nodeLevel IS NOT defined]
+      bfs:adj.setLevel(level+1)
+      bfs:queue.insert(adj)
+      --[else]
+      bfs:nothing to do
+    [/c]
+  [/c]
+[/c]
+bfs:queue.destroy()
+```
+
+\!\[Rendered diagram\]\(sample.png\)
+
 
 ## Features
-
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+ * You can easily include sequence diagrams to your projects. This is very helpful when you would like use the same IDE to switch between the source code and the diagrams. 
+ * This extension contributes a new language and all files with .sd extension will be rendered as a diagram. All diagrams are shown on the same document tb instead of creating lots of new tabs. 
+* In the future I would like to imrove the language support. At the moment a minimal grammar and language syntax is provided. I would like to also make the renderer more responsive.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Diagrams are rendered in a seperate JVM process. A working JAVA (version 5 or higher) installation is required. 
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
-For example:
+## Legal
+This extension uses Quick Sequence Diagram editor by Markus Strauch as renderer. Please see the license details below.
 
-This extension contributes the following settings:
+`Author`
+Markus Strauch <markus-strauch {AT} arcor {DOT} de>
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+`Copyright`
+Copyright (c) 2006 - 2008, Markus Strauch. All rights reserved.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+None right now
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial release of sdedit, sequence diagram editor
