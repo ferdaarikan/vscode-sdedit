@@ -1,6 +1,6 @@
 # sdedit README
 
-Sequence Diagrams inside your favourite IDE. Simply define the sequences and see nicely rendered sequence diagrams. 
+Sequence Diagrams inside your favourite IDE. Simply define the sequences and see nicely rendered sequence diagrams. Inspiread by another great extension yuml diagrams.
 
 ```
 # {threaded:false}
