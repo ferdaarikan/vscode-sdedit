@@ -1,4 +1,4 @@
-# sdedit README
+# Sequence Diagram Editor
 
 Sequence Diagrams inside your favourite IDE. Simply define the sequences and see nicely rendered sequence diagrams. Inspiread by another great extension yuml diagrams.
 
@@ -40,7 +40,7 @@ bfs:queue.destroy()
 ## Features
  * You can easily include sequence diagrams to your projects. This is very helpful when you would like use the same IDE to switch between the source code and the diagrams. 
  * This extension contributes a new language and all files with .sd extension will be rendered as a diagram. All diagrams are shown on the same document tb instead of creating lots of new tabs. 
-* In the future I would like to imrove the language support. At the moment a minimal grammar and language syntax is provided. I would like to also make the renderer more responsive.
+* In the future I would like to improve the language support. At the moment a minimal grammar and language syntax is provided. I would like to also make the renderer more responsive.
 
 ## Requirements
 
