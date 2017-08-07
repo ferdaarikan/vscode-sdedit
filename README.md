@@ -35,7 +35,7 @@ bfs:queue.insert(someNode)
 bfs:queue.destroy()
 ```
 
-![Rendered diagram](images/sample.png)
+![Rendered diagram](https://github.com/ferdaarikan/vscode-sdedit/raw/master/images/sample.png)
 
 
 ## Features
