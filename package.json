@@ -1,14 +1,15 @@
 {
     "name": "sdedit",
-    "displayName": "sdedit",
+    "displayName": "Sequence Diagram Editor",
     "description": "VSCode extension for Quick Sequence Diagram Editor",
     "version": "0.0.2",
+    "icon": "images/sdedit.png",
     "publisher": "ferdaarikan",
     "engines": {
         "vscode": "^1.13.0"
-    },
+    },    
     "categories": [
-        "Other"
+        "Other", "Languages"
     ],
     "activationEvents": [
         "onCommand:extension.viewSequenceDiagram",

@@ -2,6 +2,7 @@
 
 Sequence Diagrams inside your favourite IDE. Simply define the sequences and see nicely rendered sequence diagrams. Inspiread by another great extension yuml diagrams.
 
+
 ```
 # {threaded:false}
 # {exportType:png}
@@ -34,7 +35,7 @@ bfs:queue.insert(someNode)
 bfs:queue.destroy()
 ```
 
-![Rendered diagram](sample.png)
+![Rendered diagram](images/sample.png)
 
 
 ## Features
@@ -69,3 +70,8 @@ None right now
 ### 0.0.1
 
 Initial release of sdedit, sequence diagram editor
+
+### 0.0.2
+
+Readme changes, fixed broken preview image
+Added extension icon
