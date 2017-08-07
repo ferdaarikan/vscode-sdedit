@@ -34,7 +34,7 @@ bfs:queue.insert(someNode)
 bfs:queue.destroy()
 ```
 
-\!\[Rendered diagram\]\(sample.png\)
+![Rendered diagram](sample.png)
 
 
 ## Features
