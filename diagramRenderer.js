@@ -112,7 +112,7 @@ class diagramRenderer {
         }
 
         const self = this;
-        const panZoomScriptPath = path.join(__dirname, '/node_modules/svg-pan-zoom/dist/svg-pan-zoom.js');
+        const panZoomScriptPath = path.join(__dirname, 'svg-pan-zoom.min.js');
         const panZoomScript = fs.readFileSync(panZoomScriptPath);
         child.on('close', function (exitCode) {
             if (exitCode !== 0) {                

@@ -73,10 +73,7 @@ class sequenceDiagramProvider{
             width: 100%;
             height: 100%;
             position:fixed; 
-            top:0;             
-            left:0;
-            bottom:0;  
-            right:0 
+          
         }
 
         </style>
@@ -113,7 +110,7 @@ class sequenceDiagramProvider{
 
             if(diagram){
                 diagram = diagram.replace(/<svg[^]+?>/img, '<svg id="svgDiagram" viewBox="0 0 713 791">');
-                self.content += `<div id="diagramView">${diagram}</div>`;            
+                self.content += diagram;
             } 
            
             if(errors){  

@@ -91,3 +91,4 @@ Added extension icon
 
 Improved documentation
 Added sample code snippets
+Added interactive pan/zoom to the diagram
