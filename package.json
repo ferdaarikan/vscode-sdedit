@@ -1,58 +1,63 @@
 {
-    "name": "sdedit",
-    "displayName": "Sequence Diagram Editor",
-    "description": "VSCode extension for Quick Sequence Diagram Editor",
-    "version": "0.0.2",
-    "icon": "images/icon.png",
-    "publisher": "ferdaarikan",
-    "engines": {
-        "vscode": "^1.13.0"
-    },    
-    "categories": [
-        "Other", "Languages"
+  "name": "sdedit",
+  "displayName": "Sequence Diagram Editor",
+  "description": "VSCode extension for Quick Sequence Diagram Editor",
+  "version": "0.0.3",
+  "icon": "images/icon.png",
+  "publisher": "ferdaarikan",
+  "engines": {
+    "vscode": "^1.13.0"
+  },
+  "categories": [
+    "Other",
+    "Languages"
+  ],
+  "activationEvents": [
+    "onCommand:extension.viewSequenceDiagram",
+    "onLanguage:sd"
+  ],
+  "main": "./extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.viewSequenceDiagram",
+        "title": "View sequence diagram"
+      }
     ],
-    "activationEvents": [
-        "onCommand:extension.viewSequenceDiagram",
-        "onLanguage:sd"
-    
+    "languages": [
+      {
+        "id": "sd",
+        "aliases": [
+          "Quick sequence diagrams",
+          "sdedit"
+        ],
+        "extensions": [
+          ".sd"
+        ],
+        "configuration": "./sd.configuration.json"
+      }
     ],
-    "main": "./extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "extension.viewSequenceDiagram",
-                "title": "View sequence diagram"
-            }
-        ],
-        "languages": [
-            {
-                "id": "sd",
-                "aliases": [
-                    "Quick sequence diagrams",
-                    "sdedit"
-                ],
-                "extensions": [
-                    ".sd"
-                ],
-                "configuration": "./sd.configuration.json"
-            }
-        ],
-         "grammars": [{
+    "grammars": [
+      {
         "language": "sd",
         "scopeName": "source.sd",
         "path": "./sd.tmLanguage"
-        }]
-    },
-    "scripts": {
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "eslint": "^3.6.0",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
-    }
+      }
+    ]
+  },
+  "scripts": {
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0",
+    "mocha": "^2.3.3",
+    "eslint": "^3.6.0",
+    "@types/node": "^6.0.40",
+    "@types/mocha": "^2.2.32"
+  },
+  "dependencies": {
+    "svg-pan-zoom": "^3.5.3"
+  }
 }

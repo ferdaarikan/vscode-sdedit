@@ -4,6 +4,14 @@ Sequence Diagrams inside your favourite IDE. Simply define the sequences and see
 
 
 ```
+#simple example
+```
+
+#simple render
+
+
+
+```
 # {threaded:false}
 # {exportType:png}
 
@@ -78,3 +86,8 @@ Initial release of sdedit, sequence diagram editor
 
 Readme changes, fixed broken preview image
 Added extension icon
+
+### 0.0.3
+
+Improved documentation
+Added sample code snippets

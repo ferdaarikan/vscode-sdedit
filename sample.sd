@@ -8,7 +8,7 @@ node:Node
 adjList:List
 adj:Node
 
-bfs:queue.new
+bfs:queue.new 
 bfs:someNode.setLevel(0)
 bfs:queue.insert(someNode)
 [c:loop while queue != ()]

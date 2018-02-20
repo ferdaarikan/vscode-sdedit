@@ -1,4 +1,4 @@
-var { spawn, execFile } = require('child_process');
+var { spawn } = require('child_process');
 var fs = require('fs');
 var os = require('os');
 const path = require('path');
@@ -112,6 +112,8 @@ class diagramRenderer {
         }
 
         const self = this;
+        const panZoomScriptPath = path.join(__dirname, '/node_modules/svg-pan-zoom/dist/svg-pan-zoom.js');
+        const panZoomScript = fs.readFileSync(panZoomScriptPath);
         child.on('close', function (exitCode) {
             if (exitCode !== 0) {                
                 self.options.errors.push('Sequence diagram renderer exit code: ' + exitCode);                                
@@ -124,16 +126,10 @@ class diagramRenderer {
             });
 
             fs.readFile(outputPath, "utf8", function(err, data) {                                                
-                callback({ diagram: data, errors: messages, status: null });    
+                callback({ diagram: data, errors: messages, status: null, panZoomScript });    
             });            
         });
-
-        // If you’re really just passing it through, though, pass {stdio: 'inherit'}
-        // to child_process.spawn instead.
-        // child.stderr.on('data', function (data) {
-        //     process.stderr.write(data);
-        // });
-
+ 
         const stripMsg = (str)=>{
             const pattern =  /:\s(.*)/;
             const regex = new RegExp(pattern); 

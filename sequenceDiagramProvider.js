@@ -10,15 +10,33 @@ class sequenceDiagramProvider{
             // this.errors = "";
             // this.status = "";
             this.content = "";
+            this.panZoomScript = "";
     }
 
     provideTextDocumentContent (uri, token) {
         var editor = vscode.window.activeTextEditor;
                 if (editor)
                     editor.show();
-            
+                    // <script type="text/javascript" src="./node_modules/svg-pan-zoom/dist/svg-pan-zoom.js"></script>
+ 
         const html = `<!DOCTYPE html><html>
-        <head>
+        <head>        
+        <script src="http://ariutta.github.io/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>
+        <script>
+        ${this.panZoomScript}
+        </script>
+        <script>
+            function initialise(){
+               // console.log("init");
+                var svg = document.getElementsByTagName("svg")[0];
+                //console.log(svg);
+                svgPanZoom(svg, {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true});
+            }
+        </script>
         <style>
        /* The alert message box */
         .error {
@@ -43,10 +61,28 @@ class sequenceDiagramProvider{
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        #diagramView {
+            width: 99%;
+            width: 99vw;
+            height: 99%;
+            height: 99vh;                        
+        }
+
+        #svgDiagram {        
+            width: 100%;
+            height: 100%;
+            position:fixed; 
+            top:0;             
+            left:0;
+            bottom:0;  
+            right:0 
+        }
+
         </style>
         </head>
-        <body style="background-color:white;">
-            ${this.content}                        
+        <body style="background-color:white;" onload="initialise()">          
+            ${this.content}                                 
         </body>
         </html>`;
         return html;
@@ -67,11 +103,17 @@ class sequenceDiagramProvider{
         const renderer = new diagramRenderer();
        
         const self = this;
-         function diagramRendered({ diagram, errors, status }){            
+         function diagramRendered({ diagram, errors, status, panZoomScript }){            
             
             self.content = "";
+            
+            if(panZoomScript){
+                self.panZoomScript = panZoomScript.toString();
+            }
+
             if(diagram){
-                self.content += `<div>${diagram}</div>`;            
+                diagram = diagram.replace(/<svg[^]+?>/img, '<svg id="svgDiagram" viewBox="0 0 713 791">');
+                self.content += `<div id="diagramView">${diagram}</div>`;            
             } 
            
             if(errors){  
